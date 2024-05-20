@@ -53,7 +53,7 @@ const showProduct = async (req, res) => {
  * @api PUT /api/products/:id
  * @returns JSON
  */
-const updateProduct = async (req, res) => {
+const updateProduct = async (req, res, next) => {
     try {
         const { id } = req.params;
         const product = await Product.findOneAndUpdate({ _id: id }, req.body, {
@@ -68,7 +68,7 @@ const updateProduct = async (req, res) => {
         res.status(200).json({ message: "Product Updated Successfully", product });
     } catch (error) {
         console.error("Error updating product:", error);
-        res.status(500).json({ error: "Internal server error" });
+        next(handleMongoError(error));
     }
 }
 

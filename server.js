@@ -13,12 +13,19 @@ app.use(cors());
 app.use(express.json());
 
 
+if (process.env.NODE_ENV === 'production') {
+    app.use(express.static('client/dist'));
+    app.get('*', (req, res) => {
+        res.sendFile(path.resolve(__dirname, 'client', 'dist', 'index.html'));
+    });
+} else {
 
-app.get('/', (req, res) => {
-    res.send("Node App");
-});
+    app.get('/', (req, res) => {
+        res.send("Node App");
+    });
 
-app.use('/api/products', products);
+    app.use('/api/products', products);
+}
 
 
 app.use(notFound);
